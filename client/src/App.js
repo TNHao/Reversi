@@ -1,9 +1,9 @@
-import { Button, ButtonGroup } from '@chakra-ui/react'
+import Home from './Layouts/Home/Home';
 
 function App() {
   return (
     <div>
-      <Button>Test button</Button>
+      <Home />
     </div>
   );
 }   
