@@ -1,0 +1,43 @@
+###
+GET http://localhost:3001/api/users
+###
+GET http://localhost:3001/api/users/root
+###
+POST http://localhost:3001/api/users HTTP/1.1
+content-type: application/json 
+
+{
+    "username": "root",
+    "name": "Vinh",
+    "password": "1"
+}
+
+###
+POST http://localhost:3001/api/users HTTP/1.1
+content-type: application/json 
+
+{
+    "username": "Hao",
+    "name": "Hao",
+    "password": "1"
+}
+
+###
+POST http://localhost:3001/api/users HTTP/1.1
+content-type: application/json 
+
+{
+    "username": "Hien",
+    "name": "Hien",
+    "password": "1"
+}
+
+###
+PUT http://localhost:3001/api/users HTTP/1.1
+content-type: application/json 
+
+{
+    "username": "root",
+    "name": "Van The Vinh",
+    "password": "1412"
+}
