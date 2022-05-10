@@ -3,6 +3,7 @@ import {
     Box, Button, Center, Popover, PopoverArrow, PopoverBody, PopoverCloseButton, PopoverContent,
     PopoverHeader, PopoverTrigger, Stack, Text, useColorModeValue
 } from '@chakra-ui/react';
+import CreateRoomModal from '../../CreateRoomModal/CreateRoomModal';
 
 
 export default function CreateRoom() {
@@ -42,20 +43,7 @@ export default function CreateRoom() {
                 </Stack>
 
                 <Box bg={useColorModeValue('gray.50', 'gray.900')} px={6} py={10}>
-                    <Button
-                        w={'full'}
-                        bg={'orange.400'}
-                        color={'white'}
-                        rounded={'xl'}
-                        boxShadow={'0 5px 20px 0px rgb(0 0 0 / 43%)'}
-                        _hover={{
-                            bg: 'orange.500',
-                        }}
-                        _focus={{
-                            bg: 'orange.500',
-                        }}>
-                        Tạo
-                    </Button>
+                    <CreateRoomModal />
                 </Box>
             </Box>
         </Center>

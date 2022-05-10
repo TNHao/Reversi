@@ -3,6 +3,7 @@ import {
     Box, Button, Center, Popover, PopoverArrow, PopoverBody, PopoverCloseButton, PopoverContent,
     PopoverHeader, PopoverTrigger, Stack, Text, useColorModeValue
 } from '@chakra-ui/react';
+import JoinRoomModal from './JoinRoomModal/JoinRoomModal';
 
 
 export default function JoinRoom() {
@@ -42,7 +43,7 @@ export default function JoinRoom() {
                 </Stack>
 
                 <Box bg={useColorModeValue('gray.50', 'gray.900')} px={6} py={10}>
-                    <Button
+                    {/* <Button
                         w={'full'}
                         bg={'orange.400'}
                         color={'white'}
@@ -55,7 +56,8 @@ export default function JoinRoom() {
                             bg: 'orange.500',
                         }}>
                         Tham gia
-                    </Button>
+                    </Button> */}
+                    <JoinRoomModal />
                 </Box>
             </Box>
         </Center>
