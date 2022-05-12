@@ -1,9 +1,13 @@
 import Home from './Layouts/Home/Home';
+import PlayGround from './Layouts/PlayGround/PlayGround';
+import UserProfile from './Layouts/User/UserProfile/UserProfile';
 
 function App() {
   return (
     <div>
-      <Home />
+      {/* <Home /> */}
+      {/* <UserProfile /> */}
+      <PlayGround />
     </div>
   );
 }   
