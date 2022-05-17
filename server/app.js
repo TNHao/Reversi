@@ -11,6 +11,7 @@ const logger = require('./utils/logger');
 const loginRouter = require('./controllers/login');
 const usersRouter = require('./controllers/users');
 const authenticationRouter = require('./controllers/authentication');
+const playerRoute = require('./modules/player/playerRoute');
 
 logger.info('Connecting to', config.MONGODB_URI);
 
@@ -32,6 +33,7 @@ app.use(middleware.getTokenFrom);
 app.use(middleware.extractUserFromToken);
 
 // Routing
+app.use("/api/player", playerRoute);
 app.use('/api/login', loginRouter);
 app.use('/api/users/', usersRouter);
 app.use('/api/authentication', authenticationRouter);
