@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-// const { Schema } = mongoose;
 
 const playerSchema = new mongoose.Schema({
     displayName: { type: String, required: true },

@@ -2,9 +2,20 @@ const Player = require('../../models/player/player')
 const bcrypt = require('bcrypt');
 
 const getAll = async (req, res) => {
-    console.log('get all players');
     const players = await Player.find({});
     res.status(200).json({players});
+};
+
+const findOneById = async (req, res) => {
+    const { id } = req.body;
+    const player = await Player.findOne({ id: id });
+    res.status(200).json({player});
+};
+
+const findOneByUsername = async (req, res) => {
+    const { username } = req.body;
+    const player = await Player.findOne({ username });
+    res.status(200).json({player});
 };
 
 const addOne = async (req, res) => {
@@ -28,8 +39,6 @@ const addOne = async (req, res) => {
         username,
         password: passwordHash,
     });
-
-    console.log(newPlayer);
 
     await newPlayer.save();
 
@@ -74,6 +83,8 @@ const deleteOne = async (req, res) => {
 
 module.exports = playerController = {
     getAll,
+    findOneById,
+    findOneByUsername,
     addOne,
     updateOne,
     deleteOne,
