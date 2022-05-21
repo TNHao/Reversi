@@ -13,6 +13,7 @@ const usersRouter = require('./controllers/users');
 const authenticationRouter = require('./controllers/authentication');
 const playerRoute = require('./modules/player/playerRoute');
 const matchRoute = require('./modules/match/matchRoute');
+const authenticationRoute = require('./modules/authentication/authenticationRoute');
 
 logger.info('Connecting to', config.MONGODB_URI);
 
@@ -37,8 +38,8 @@ app.use(middleware.extractUserFromToken);
 app.use("/api/player", playerRoute);
 app.use("/api/match", matchRoute);
 app.use('/api/login', loginRouter);
+app.use('/api/authentication', authenticationRoute);
 // app.use('/api/users/', usersRouter);
-app.use('/api/authentication', authenticationRouter);
 
 // Error handling
 app.use(middleware.unknownEndpoint);
