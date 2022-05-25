@@ -8,8 +8,10 @@ const middleware = require('./utils/middleware');
 
 const config = require('./utils/config');
 const logger = require('./utils/logger');
-const loginRouter = require('./controllers/login');
-const usersRouter = require('./controllers/users');
+const loginRouter = require('./routes/login');
+const usersRouter = require('./routes/users');
+const roomsRouter = require('./routes/rooms');
+
 const authenticationRouter = require('./controllers/authentication');
 
 logger.info('Connecting to', config.MONGODB_URI);
@@ -35,6 +37,7 @@ app.use(middleware.extractUserFromToken);
 app.use('/api/login', loginRouter);
 app.use('/api/users/', usersRouter);
 app.use('/api/authentication', authenticationRouter);
+app.use('/api/room', roomsRouter);
 
 // Error handling
 app.use(middleware.unknownEndpoint);
