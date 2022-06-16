@@ -3,8 +3,8 @@ const mongoose = require('mongoose');
 const matchSchema = new mongoose.Schema({
   playerOne: { type: Object, required: true },
   playerTwo: { type: Object, required: true },
-  result: { type: Number, required: true },
-  moveHistory: { type: [String] },
+  result: { type: Number, default: 0 },
+  moveHistory: { type: [String], default: [] },
   timeStart: { type: Date, default: Date.now },
   timeEnd: { type: Date, default: Date.now },
 });

@@ -8,7 +8,8 @@ content-type: application/json
 
 {
     "username": "root",
-    "name": "Vinh",
+    "name": "root",
+    "email": "example@mail.com",
     "password": "1"
 }
 
@@ -17,18 +18,9 @@ POST http://localhost:3001/api/users HTTP/1.1
 content-type: application/json 
 
 {
-    "username": "Hao",
-    "name": "Hao",
-    "password": "1"
-}
-
-###
-POST http://localhost:3001/api/users HTTP/1.1
-content-type: application/json 
-
-{
-    "username": "Hien",
-    "name": "Hien",
+    "username": "tung",
+    "name": "Van The Tung",
+    "email": "vanthetung@gmail.com",
     "password": "1"
 }
 
@@ -38,6 +30,6 @@ content-type: application/json
 
 {
     "username": "root",
-    "name": "Van The Vinh",
-    "password": "1412"
+    "displayName": "root",
+    "password": "1"
 }

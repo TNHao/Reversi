@@ -1,7 +1,12 @@
 const mongoose = require('mongoose');
 
 const roomSchema = new mongoose.Schema({
-  players: { type: [String], required: true },
+  players: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+    },
+  ],
   mapSize: { type: Number, default: 5 },
   diffNumChessSetting: {
     type: Object,

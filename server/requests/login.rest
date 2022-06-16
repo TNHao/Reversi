@@ -3,8 +3,5 @@ content-type: application/json
 
 {
     "username": "root",
-    "password": "1412"
+    "password": "1"
 }
-###
-GET http://localhost:3001/api/authentication HTTP/1.1
-Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3QiLCJpZCI6IjYyNzZjZTYyNTRlMGQzZjYyODZmZTBkMyIsImlhdCI6MTY1MTk1ODAxMH0.g_Gepyde6bc20q2VXOFltDoF4d8EcaLY_ecWNiryNp8

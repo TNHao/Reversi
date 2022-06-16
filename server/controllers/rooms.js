@@ -1,9 +1,11 @@
 const Room = require('../models/room');
+const mongoose = require('mongoose');
+const User = require('../models/user');
 
 module.exports = {
   createRoom: async (req, res) => {
     const {
-      username,
+      user,
       mapSize,
       diffNumChessSetting,
       minChess,
@@ -11,8 +13,16 @@ module.exports = {
       maxTimeOut,
       turnTime,
     } = req.body;
+
+    if (user === null) {
+      return res
+        .status(400)
+        .json({ message: 'You must log in to create room' });
+    }
+
+    const usernameObjectId = mongoose.Types.ObjectId(user.id);
     const roomResult = await Room.findOne({
-      'players[0]': `${masterUsername}`,
+      'players[0]': { $eq: usernameObjectId },
     });
 
     if (roomResult === null) {
@@ -25,6 +35,7 @@ module.exports = {
         maxTimeOut,
         turnTime,
       });
+
       const savedRoom = await newRoom.save();
       return res.status(200).json(savedRoom);
     }
@@ -40,7 +51,7 @@ module.exports = {
   getRoomByMasterUsername: async (req, res) => {
     const masterUsername = req.params.masterUsername;
     const roomResult = await Room.findOne({
-      'players[0]': `${masterUsername}`,
+      players: `${masterUsername}`,
     });
     res.json(roomResult);
   },
@@ -85,16 +96,24 @@ module.exports = {
   },
 
   deleteRoomByMasterUsername: async (req, res) => {
-    const { masterUsername } = req.body;
+    const { username } = req.body;
+
+    const user = await User.findOne({ username });
+    if (user === null) {
+      return res.status(400).json({ message: 'User doesnt exist' });
+    }
+
+    const id = mongoose.Types.ObjectId(user.id);
+
     const roomResult = await Room.findOne({
-      'players[0]': `${masterUsername}`,
+      'players[0]': { $eq: id },
     });
 
     if (roomResult !== null) {
       await Room.findByIdAndDelete(roomResult.id);
       return res
-        .status(204)
-        .send({ message: `Successfully deleted room of : ${masterUsername}` });
+        .status(200)
+        .send({ message: `Successfully deleted room of : ${username}` });
     }
 
     res.status(400).json({ message: 'Room doesnt exist' });
