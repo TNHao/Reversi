@@ -1,0 +1,50 @@
+roomsRouter.get('/', roomsController.getAll);
+roomsRouter.post('/', roomsController.createRoom);
+roomsRouter.put('/', roomsController.updateRoom);
+roomsRouter.delete('/', roomsController.deleteRoomByMasterUsername);
+roomsRouter.get('/:masterUsername', roomsController.getRoomByMasterUsername);
+###
+GET http://localhost:3001/api/room
+
+###
+POST http://localhost:3001/api/room HTTP/1.1
+content-type: application/json 
+
+{
+    "username": "629ec89d10c56767f23da748",
+    "mapSize": 5,
+    "diffNumChessSetting": {
+        "diffNum": false,
+        "player": 1
+    },
+    "minChess": 0,
+    "maxTimesOutTimes": 1,
+    "maxTimeOut": 120,
+    "turnTime": 60
+}
+
+###
+POST http://localhost:3001/api/room HTTP/1.1
+content-type: application/json 
+
+{
+    "username": "629ec89d10c56767f23da748",
+    "mapSize": 5,
+    "diffNumChessSetting": {
+        "diffNum": false,
+        "player": 1
+    },
+    "minChess": 0,
+    "maxTimesOutTimes": 1,
+    "maxTimeOut": 120,
+    "turnTime": 60
+}
+
+###
+
+DELETE http://localhost:3001/api/room HTTP/1.1
+content-type: application/json 
+
+{
+    "username": "vinh"
+}
