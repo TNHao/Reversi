@@ -1,5 +1,7 @@
 const express = require('express');
 const app = express();
+const http = require('http');
+
 require('express-async-errors');
 const cors = require('cors');
 const mongoose = require('mongoose');
@@ -11,7 +13,12 @@ const logger = require('./utils/logger');
 const loginRouter = require('./routes/login');
 const usersRouter = require('./routes/users');
 const roomsRouter = require('./routes/rooms');
-
+const socketRouter = require('./routes/socket');
+const SocketServices = require('./services/socket');
+const server = http.createServer(app);
+const io = require('socket.io')(server);
+global._baseDir = __dirname;
+global._io = io;
 //const authenticationRouter = require('./controllers/authentication');
 
 logger.info('Connecting to', config.MONGODB_URI);
@@ -37,9 +44,11 @@ app.use(middleware.extractUserFromToken);
 app.use('/api/login', loginRouter);
 app.use('/api/users/', usersRouter);
 app.use('/api/room', roomsRouter);
+app.use('/api/socket', socketRouter);
 
-// Error handling
+global._io.on('connection', SocketServices.connection);
+
 app.use(middleware.unknownEndpoint);
 app.use(middleware.errorHandler);
 
-module.exports = app;
+module.exports = { server, io };

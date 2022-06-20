@@ -1,9 +1,3 @@
-roomsRouter.get('/', roomsController.getAll);
-roomsRouter.post('/', roomsController.createRoom);
-roomsRouter.put('/', roomsController.updateRoom);
-roomsRouter.delete('/', roomsController.deleteRoomByMasterUsername);
-roomsRouter.get('/:masterUsername', roomsController.getRoomByMasterUsername);
-###
 GET http://localhost:3001/api/room
 
 ###
