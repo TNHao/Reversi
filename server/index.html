@@ -64,6 +64,7 @@
     <script src="/socket.io/socket.io.js"></script>
     <script>
       var username = prompt('Enter username');
+      var target = prompt('Enter target');
       var socket = io();
       socket.emit('register', username);
       var messages = document.getElementById('messages');
@@ -74,40 +75,90 @@
       form.addEventListener('submit', function (e) {
         e.preventDefault();
         if (input.value) {
-          socket.emit('move', input.value);
-          input.value = '';
+          const tag = input.value.split(' ')[0];
+          const msg = input.value.split(' ')[1];
+          const rule1 = {
+            mapSize: 5,
+            diffNumChessSetting: { diffNum: false, player: 1 },
+            minChess: 0,
+            maxTimeOutTimes: 1,
+            maxTimeOut: 120,
+            turnTime: 60,
+          };
+          const rule2 = {
+            mapSize: 7,
+            diffNumChessSetting: { diffNum: false, player: 1 },
+            minChess: 0,
+            maxTimeOutTimes: 1,
+            maxTimeOut: 120,
+            turnTime: 60,
+          };
+          switch (tag) {
+            case 'move':
+              socket.emit('move', { username, target, move: msg });
+              break;
+            case 'start':
+              socket.emit('start', {
+                username,
+                target,
+                rule: rule1,
+              });
+              break;
+            case 'timeup':
+              socket.emit('timeup', { username, target });
+              break;
+            case 'pauseReq':
+              socket.emit('pauseReq', { username, target });
+              break;
+            case 'pauseRes':
+              socket.emit('pauseRes', { username, target, response: msg });
+              break;
+            case 'updateRule':
+              socket.emit('updateRule', { username, target, rule: rule2 });
+              console.log('Rule');
+              break;
+          }
         }
       });
 
+      socket.on('start', function (msg) {
+        var item = document.createElement('li');
+        item.textContent = 'start: ' + msg.rule.mapSize;
+        messages.appendChild(item);
+        window.scrollTo(0, document.body.scrollHeight);
+      });
       socket.on('move', function (msg) {
         var item = document.createElement('li');
-        console.log(messages);
-        console.log(item);
-        item.textContent = 'move: ' + msg + '. Now its your turn';
+        item.textContent = 'move: ' + msg.username + ' ' + msg.move;
         messages.appendChild(item);
         window.scrollTo(0, document.body.scrollHeight);
       });
 
       socket.on('pauseRes', function (msg) {
         var item = document.createElement('li');
-        item.textContent = msg;
+        item.textContent = 'Pause: ' + msg.response;
         messages.appendChild(item);
         window.scrollTo(0, document.body.scrollHeight);
       });
 
-      socket.on('swap', function () {
+      socket.on('timeup', function (msg) {
         var item = document.createElement('li');
-        item.textContent = 'Its your turn';
+        item.textContent = msg.msg;
         messages.appendChild(item);
         window.scrollTo(0, document.body.scrollHeight);
       });
 
       socket.on('pauseReq', function (msg) {
         var item = document.createElement('li');
-        item.textContent = msg + 'want to pause';
+        item.textContent = msg.username + ' want to pause';
         messages.appendChild(item);
         window.scrollTo(0, document.body.scrollHeight);
-        var response = prompt(`yes or no for timeout from ${item}?`);
+      });
+      socket.on('updateRule', function (msg) {
+        var item = document.createElement('li');
+        item.textContent = 'rule updated: ' + msg.rule.mapSize;
+        messages.appendChild(item);
+        window.scrollTo(0, document.body.scrollHeight);
       });
     </script>
   </body>
