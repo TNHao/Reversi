@@ -41,8 +41,8 @@ app.use(middleware.getTokenFrom);
 app.use(middleware.extractUserFromToken);
 
 // Routing
-app.use("/api/player", playerRoute);
-app.use("/api/match", matchRoute);
+// app.use("/api/player", playerRoute);
+// app.use("/api/match", matchRoute);
 app.use('/api/login', loginRouter);
 
 // app.use('/api/authentication', authenticationRoute);
