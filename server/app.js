@@ -42,9 +42,9 @@ app.use(middleware.extractUserFromToken);
 
 // Routing
 app.use('/api/login', loginRouter);
-app.use('/api/users/', usersRouter);
-app.use('/api/room', roomsRouter);
-app.use('/api/socket', socketRouter);
+app.use('/api/users/', middleware.checkLogin, usersRouter);
+app.use('/api/room', middleware.checkLogin, roomsRouter);
+app.use('/api/socket', socketRouter); // remove
 
 global._io.on('connection', SocketServices.connection);
 

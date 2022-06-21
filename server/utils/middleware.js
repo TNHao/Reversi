@@ -32,6 +32,13 @@ const extractUserFromToken = async (req, res, next) => {
   next();
 };
 
+const checkLogin = async (req, res, next) => {
+  if (req.body.user) {
+    next();
+  } else {
+    return res.status(401).send({ error: 'unauthorized' });
+  }
+};
 const userRequired = (req, res) => {
   res.status(401).send({ error: 'unauthorized' });
 };
@@ -51,4 +58,5 @@ module.exports = {
   errorHandler,
   getTokenFrom,
   extractUserFromToken,
+  checkLogin,
 };
