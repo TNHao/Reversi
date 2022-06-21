@@ -48,6 +48,12 @@ class SocketServices {
       const targetId = SocketServices.find(target);
       _io.to(targetId).emit('start', { rule });
     });
+
+    socket.on('quitRoom', (msg) => {
+      const { username, target } = msg;
+      const targetId = SocketServices.find(target);
+      _io.to(targetId).emit('quitRoom');
+    });
   }
 }
 
