@@ -38,7 +38,6 @@ const numInput = (name, onChangeFn, value) => {
 export default function CreateRoomModal() {
     const { isOpen, onOpen, onClose } = useDisclosure()
     const [state, setState] = useState({
-        name: "",
         size: 5,
         differential: 2,
         thinkingTime: 60,
@@ -53,7 +52,7 @@ export default function CreateRoomModal() {
             ({ target }) => {
                 setState((s) => ({
                     ...s,
-                    [name]: target.value,
+                    [name]: Number(target.value),
                 }));
             };
 
@@ -61,6 +60,9 @@ export default function CreateRoomModal() {
         socket.on('room.create.res', (data) => {
             console.log(data);
             if (data.status === "success") {
+                localStorage.setItem('data', JSON.stringify(data.data));
+                localStorage.setItem('color', 'blue');
+                localStorage.setItem('roomId', data.roomId);
                 navigate('/play');
             }
         });
@@ -103,11 +105,10 @@ export default function CreateRoomModal() {
                     <ModalHeader textAlign={'center'}>Tạo phòng chơi mới</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody pb={6}>
-                        <FormControl isRequired>
+                        {/* <FormControl isRequired>
                             <FormLabel>Tên phòng chơi</FormLabel>
-                            {/* {numInput("test", handleChange, state.name)} */}
                             <Input value={state.name} onChange={handleChange('name')} />
-                        </FormControl>
+                        </FormControl> */}
                         <FormControl isRequired mt={3}>
                             <FormLabel>Thời gian suy nghĩ</FormLabel>
                             <Input value={state.thinkingTime} onChange={handleChange('thinkingTime')} />

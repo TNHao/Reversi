@@ -1,6 +1,8 @@
-const { server, io } = require('./app');
+// const { server, io } = require('./app');
+const app = require('./app');
+const http = require('http');
 const config = require('./utils/config');
-const logger = require('./utils/logger');
+// const logger = require('./utils/logger');
 
 // const socketServer = require('socket.io').Server;
 // const server = http.createServer(app);

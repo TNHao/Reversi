@@ -20,25 +20,31 @@ export default function Board() {
   // const { color, roomId, data } = dat;
   // console.log( color, roomId, data );
 
-  let roomId = '';
-  let color = 'none';
-  let data = {
-    name: "",
-    size: 5,
-    differential: 0,
-    thinkingTime: 60,
-    minimumPiecesToLose: 0,
-    pauseTime: 2,
-    pausePeriod: 120,
-  };
-  let board = [];
+  // let data = {
+  //   name: "",
+  //   size: 5,
+  //   differential: 0,
+  //   thinkingTime: 60,
+  //   minimumPiecesToLose: 0,
+  //   pauseTime: 2,
+  //   pausePeriod: 120,
+  // };
+
+  const color = localStorage.getItem('color');
+  const data = JSON.parse(localStorage.getItem('data'));
+  console.log('get', data, color);
+  let board = getBoard();
 
   const [prePos, setPrePos] = useState(-1);
   const [turn, setTurn] = useState('blue');
 
-  console.log(data.size, data.differential, color);
   const mapSize = 630;
   const tileSize = mapSize / data.size;
+  let b1 = "Your turn", b2 = "Competitor turn";
+  if (color === 'red') {
+    b1 = "Competitor turn";
+    b2 = "Your turn";
+  }
 
   const hold = (pos, className) => {
     if (pos === -1) return;
@@ -113,12 +119,14 @@ export default function Board() {
     }
   };
 
-  const move = (from, to, className) => {
-    hold(from, "none");
+  const move = (from, to) => {
+    const className = document.getElementById(from).className;
+    if (className === "none") return;
+    // console.log('move', from, to, className);
     document.getElementById(from).className = "none";
     let cl = "red";
     let cr = "blue";
-    if (className === "blue_hold") {
+    if (className === "blue") {
       cl = "blue";
       cr = "red";
     }
@@ -234,10 +242,22 @@ export default function Board() {
         document.getElementById((x - 1) * data.size + (y + 1)).className = cl;
       }
     }
+    if (turn === "red") {
+      setTurn("blue");
+    } else {
+      setTurn("red");
+    }
   };
 
+  useEffect(() => {
+    socket.on('move', (data) => {
+      console.log(data);
+      move(Number(data.from), Number(data.to));
+    })
+  })
+
   const handleClick = (id) => {
-    console.log(id, turn, color);
+    console.log('click', id, turn, color);
     const className = document.getElementById(id).className;
     if ((className !== turn && className !== turn + "_hold") || turn !== color) return;
 
@@ -253,19 +273,15 @@ export default function Board() {
       hold(id, "red_hold");
       setPrePos(id);
     } else {
-      console.log("move");
-      move(prePos, id, className);
+      // console.log("move");
+      // move(prePos, id);
+      hold(prePos, "none");
       socket.emit("move", {
         id: socket.id,
         from: prePos,
         to: id,
       });
       setPrePos(-1);
-      if (turn === "red") {
-        setTurn("blue");
-      } else {
-        setTurn("red");
-      }
     }
   };
 
@@ -283,7 +299,7 @@ export default function Board() {
     } else {
       r = r + (data.differential % 2);
     }
-    console.log(l, r);
+    // console.log(l, r);
 
     for (let j = 0; j < data.size; j++) {
       for (let i = 0; i < data.size; i++) {
@@ -553,17 +569,27 @@ export default function Board() {
   }
 
   return (
-    <div
-      id="board"
-      style={{
-        height: `${mapSize}px`,
-        width: `${mapSize}px`,
-        display: "grid",
-        gridTemplateColumns: `repeat(${data.size}, ${tileSize}px)`,
-        gridTemplateRows: `repeat(${data.size}, ${tileSize}px)`,
-      }}
-    >
-      {board}
+    <div id="block_container">
+      <div
+        id="board"
+        style={{
+          height: `${mapSize}px`,
+          width: `${mapSize}px`,
+          display: "grid",
+          gridTemplateColumns: `repeat(${data.size}, ${tileSize}px)`,
+          gridTemplateRows: `repeat(${data.size}, ${tileSize}px)`,
+        }}
+      >
+        {board}
+      </div>
+      {/* <div>
+        <div>
+          <button id="blue_turn" className="active">{b1}</button>
+        </div>
+        <div>
+          <button id="red_turn" className="not_active">{b2}</button>
+        </div>
+      </div> */}
     </div>
   );
 }
