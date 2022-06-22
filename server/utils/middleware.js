@@ -32,6 +32,10 @@ const extractUserFromToken = async (req, res, next) => {
   next();
 };
 
+const userRequired = (req, res) => {
+  res.status(401).send({ error: 'unauthorized' });
+};
+
 const unknownEndpoint = (req, res) => {
   res.status(404).send({ error: 'unknown endpoint' });
 };

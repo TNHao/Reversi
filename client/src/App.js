@@ -1,9 +1,13 @@
-import { Button, ButtonGroup } from '@chakra-ui/react'
+import Home from './Layouts/Home/Home';
+import PlayGround from './Layouts/PlayGround/PlayGround';
+import UserProfile from './Layouts/User/UserProfile/UserProfile';
 
 function App() {
   return (
     <div>
-      <Button>Test button</Button>
+      {/* <Home /> */}
+      {/* <UserProfile /> */}
+      <PlayGround />
     </div>
   );
 }   
