@@ -3,7 +3,7 @@ import {
     Box, Button, Center, Popover, PopoverArrow, PopoverBody, PopoverCloseButton, PopoverContent,
     PopoverHeader, PopoverTrigger, Stack, Text, useColorModeValue
 } from '@chakra-ui/react';
-import CreateRoomModal from '../../CreateRoomModal/CreateRoomModal';
+import CreateRoomModal from './CreateRoomModal/CreateRoomModal';
 
 
 export default function CreateRoom() {

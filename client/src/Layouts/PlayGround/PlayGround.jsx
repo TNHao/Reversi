@@ -19,7 +19,7 @@ export default function PlayGround(data) {
                 </Text>
             </Heading>
             <HStack p={10}>
-                <GameBoard {...data}/>
+                <GameBoard/>
                 <GameOptions />
             </HStack>
         </>

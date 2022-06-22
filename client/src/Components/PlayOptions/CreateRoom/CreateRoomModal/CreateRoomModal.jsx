@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { socket } from '../../../../Services';
 import {
     Modal,
     ModalOverlay,
@@ -44,6 +46,7 @@ export default function CreateRoomModal() {
         pauseTime: 2,
         pausePeriod: 120
     });
+    const navigate = useNavigate();
 
     const handleChange =
         (name) =>
@@ -54,7 +57,21 @@ export default function CreateRoomModal() {
                 }));
             };
 
+    useEffect(() =>{
+        socket.on('room.create.res', (data) => {
+            console.log(data);
+            if (data.status === "success") {
+                navigate('/play');
+            }
+        });
+    });
+
     const handleOnJoinBtnClick = () => {
+        socket.emit('room.create', {
+            id: socket.id,
+            name: 'H',
+            data: state,
+        })
         console.log(state);
     }
 

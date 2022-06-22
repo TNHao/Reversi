@@ -21,23 +21,25 @@ const logger = require('./utils/logger');
 const server = http.createServer(app);
 
 const io = require('socket.io')(server, { cors: { origin: '*' } });
+const ioSocketServer = require('./services/socketIO');
+ioSocketServer(io);
 
 // events will go here...
-io.on('connection', (socket) => {
-    console.log('New User connected');
+// io.on('connection', (socket) => {
+//     console.log('New User connected');
 
-    socket.on('move', (data) => {
-        console.log(data);
-        // console.log(`Message from client: ${data.text}, whoose id is: ${data.from}`);
-        io.to("452361").emit('on-text-change', data);
-    });
+//     socket.on('move', (data) => {
+//         console.log(data);
+//         // console.log(`Message from client: ${data.text}, whoose id is: ${data.from}`);
+//         io.to("452361").emit('on-text-change', data);
+//     });
 
-    socket.on('disconnect', () => {
-        console.log('User disconnected');
-    });
-});
+//     socket.on('disconnect', () => {
+//         console.log('User disconnected');
+//     });
+// });
 
 // const PORT = 3001; // process.env.PORT || 80;
 const URL = `http://localhost:${config.PORT}/`;
 
-server.listen(PORT, () => console.log(`Listening on ${URL}`));
+server.listen(config.PORT, () => console.log(`Listening on ${URL}`));

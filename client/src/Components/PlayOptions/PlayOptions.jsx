@@ -24,7 +24,7 @@ export default function PlayOptions() {
             </Button>
             <Collapse in={isOpen} style={{overflow: 'visible !important'}} animateOpacity>
                 <Stack direction={['column', 'row']} spacing='50px'>
-                    <RandomRoom />
+                    {/* <RandomRoom /> */}
                     <CreateRoom />
                     <JoinRoom />
                 </Stack>
