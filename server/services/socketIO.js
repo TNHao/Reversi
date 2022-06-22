@@ -19,14 +19,15 @@ function onConnection(socket) {
     console.log('New User connected');
 
     socket.on('room.create', (data) => {
+        const roomId = generateId()
         rooms.push({
-            id: generateId(),
+            id: roomId,
             player1: {id: data.id, name: data.name},
             player2: {id: '', name: ''},
             data: data.data,
         });
         console.log(rooms);
-        io.to(data.id).emit('room.create.res', {status: "success"})
+        io.to(data.id).emit('room.create.res', {status: "success", roomId, data: data.data})
     })
 
     socket.on('room.join', (data) => {
@@ -36,7 +37,7 @@ function onConnection(socket) {
             rooms[index].player2.id = data.id;
             rooms[index].player2.name = data.name;
             console.log(rooms);
-            io.to(data.id).emit('room.join.res', {status: "success"})
+            io.to(data.id).emit('room.join.res', {status: "success", roomId: rooms[index].id, data: rooms[index].data})
         } else {
             io.to(data.id).emit('room.join.res', {status: "fail"})
         }
@@ -70,12 +71,96 @@ function onConnection(socket) {
 
     socket.on('move', (data) => {
         console.log(data);
-        // console.log(`Message from client: ${data.text}, whoose id is: ${data.from}`);
-        io.to("452361").emit('on-text-change', data);
+        const index = rooms.findIndex((room) => room.player2.id === data.id);
+        if (index !== -1 && rooms[index].player1.id !== '') {
+            io.to(rooms[index].player1.id).emit('move', {
+                from: data.from,
+                to: data.to,
+            });
+            io.to(rooms[index].player2.id).emit('move', {
+                from: data.from,
+                to: data.to,
+            });
+        } else {
+            const index = rooms.findIndex((room) => room.player1.id === data.id);
+            if (index !== -1 && rooms[index].player2.id !== '') {
+                io.to(rooms[index].player1.id).emit('move', {
+                    from: data.from,
+                    to: data.to,
+                });
+                io.to(rooms[index].player2.id).emit('move', {
+                    from: data.from,
+                    to: data.to,
+                });
+            }
+        }
     });
 
+    socket.on('tie', (data) => {
+        console.log(data.id + ' tie');
+        const index = rooms.findIndex((room) => room.player2.id === data.id);
+        if (index !== -1 && rooms[index].player1.id !== '') {
+            io.to(rooms[index].player1.id).emit('tie', {});
+        } else {
+            const index = rooms.findIndex((room) => room.player1.id === data.id);
+            if (index !== -1 && rooms[index].player2.id !== '') {
+                io.to(rooms[index].player2.id).emit('tie', {});
+            }
+        }
+    });
+
+    socket.on('tie.res', (data) => {
+        console.log(data.id + ' tie.res');
+        const index = rooms.findIndex((room) => room.player2.id === data.id);
+        if (index !== -1 && rooms[index].player1.id !== '') {
+            io.to(rooms[index].player1.id).emit('tie.res', {status: 'success'});
+        } else {
+            const index = rooms.findIndex((room) => room.player1.id === data.id);
+            if (index !== -1 && rooms[index].player2.id !== '') {
+                io.to(rooms[index].player2.id).emit('tie.res', {status: 'success'});
+            }
+        }
+    });
+
+    socket.on('close', (data) => {
+        console.log(data.id + ' close');
+        const index = rooms.findIndex((room) => room.player2.id === data.id);
+        if (index !== -1 && rooms[index].player1.id !== '') {
+            io.to(rooms[index].player1.id).emit('close', {});
+        } else {
+            const index = rooms.findIndex((room) => room.player1.id === data.id);
+            if (index !== -1 && rooms[index].player2.id !== '') {
+                io.to(rooms[index].player2.id).emit('close', {});
+            }
+        }
+    });
+
+    // socket.on('close.res', (data) => {
+    //     console.log(data.id + ' close.res');
+    //     const index = rooms.findIndex((room) => room.player2.id === data.id);
+    //     if (index !== -1 && rooms[index].player1.id !== '') {
+    //         io.to(rooms[index].player1.id).emit('close.res', {status: 'success'});
+    //     } else {
+    //         const index = rooms.findIndex((room) => room.player1.id === data.id);
+    //         if (index !== -1 && rooms[index].player2.id !== '') {
+    //             io.to(rooms[index].player2.id).emit('close.res', {status: 'success'});
+    //         }
+    //     }
+    // });
+
     socket.on('disconnect', () => {
-        console.log('User disconnected');
+        // clientId = socket.id;
+        // const index = rooms.findIndex((room) => room.player2.id === clientId);
+        // if (index !== -1) {
+        //     rooms.splice(index, 1);
+        // } else {
+        //     const index = rooms.findIndex((room) => room.player1.id === clientId);
+        //     if (index !== -1) {
+        //         rooms.splice(index, 1);
+        //     }
+        // }
+        // console.log(rooms);
+        console.log('User disconnected ' + socket.id);
     });
 }
 

@@ -4,6 +4,7 @@ import GameBoard from './GameBoard/GameBoard'
 import GameOptions from './GameOptions/GameOptions'
 
 export default function PlayGround(data) {
+    const roomId = localStorage.getItem('roomId');
     return (
         <>
             <Heading
@@ -15,7 +16,7 @@ export default function PlayGround(data) {
                 lineHeight={'110%'}>
                 Phòng chơi {' '}
                 <Text as={'span'} color={'green.400'}>
-                    V1p Pr0 101
+                    {roomId}
                 </Text>
             </Heading>
             <HStack p={10}>

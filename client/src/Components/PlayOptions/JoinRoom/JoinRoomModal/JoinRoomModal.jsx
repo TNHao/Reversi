@@ -25,6 +25,9 @@ export default function JoinRoomModal() {
         socket.on('room.join.res', (data) => {
             console.log(data);
             if (data.status === "success") {
+                localStorage.setItem('data', JSON.stringify(data.data));
+                localStorage.setItem('color', 'red');
+                localStorage.setItem('roomId', data.roomId);
                 navigate('/play');
             }
         });
