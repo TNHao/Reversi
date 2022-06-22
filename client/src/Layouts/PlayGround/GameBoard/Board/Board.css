@@ -1,0 +1,121 @@
+#board .tile1 {
+    background-image: url("./../assets/images/1.svg");
+    background-size: contain;
+}
+
+#board .tile2 {
+    background-image: url("./../assets/images/2.svg");
+    background-size: contain;
+}
+
+#board .tile3 {
+    background-image: url("./../assets/images/3.svg");
+    background-size: contain;
+}
+
+#board .tile4 {
+    background-image: url("./../assets/images/4.svg");
+    background-size: contain;
+}
+
+#board .tile5 {
+    background-image: url("./../assets/images/5.svg");
+    background-size: contain;
+}
+
+#board .tile6 {
+    background-image: url("./../assets/images/6.svg");
+    background-size: contain;
+}
+
+#board .tile7 {
+    background-image: url("./../assets/images/7.svg");
+    background-size: contain;
+}
+
+#board .tile8 {
+    background-image: url("./../assets/images/8.svg");
+    background-size: contain;
+}
+
+#board .tile9 {
+    background-image: url("./../assets/images/9.svg");
+    background-size: contain;
+}
+
+#board .tile10 {
+    background-image: url("./../assets/images/10.svg");
+    background-size: contain;
+}
+
+#board .tile11 {
+    background-image: url("./../assets/images/11.svg");
+    background-size: contain;
+}
+
+#board .tile12 {
+    background-image: url("./../assets/images/12.svg");
+    background-size: contain;
+}
+
+#board .tile13 {
+    background-image: url("./../assets/images/13.svg");
+    background-size: contain;
+}
+
+#board .tile14 {
+    background-image: url("./../assets/images/14.svg");
+    background-size: contain;
+}
+
+#board .blue {
+    height: 60%;
+    width: 60%;
+    margin-top: 20%;
+    margin-left: 20%;
+    background-color: blue;
+    border-radius: 50%;
+    border-width: 2px;
+    border-color: darkblue;
+}
+
+#board .red {
+    height: 60%;
+    width: 60%;
+    margin-top: 20%;
+    margin-left: 20%;
+    background-color: red;
+    border-radius: 50%;
+    border-width: 2px;
+    border-color: darkred;
+}
+
+#board .blue_hold {
+    height: 60%;
+    width: 60%;
+    margin-top: 20%;
+    margin-left: 20%;
+    background-color: lightblue;
+    border-radius: 50%;
+    border-width: 2px;
+    border-color: blue;
+    opacity: 50%;
+}
+
+#board .red_hold {
+    height: 60%;
+    width: 60%;
+    margin-top: 20%;
+    margin-left: 20%;
+    background-color: lightpink;
+    border-radius: 50%;
+    border-width: 2px;
+    border-color: red;
+    opacity: 50%;
+}
+
+#board .none {
+    height: 0%;
+    width: 0%;
+    border-width: 0px;
+}

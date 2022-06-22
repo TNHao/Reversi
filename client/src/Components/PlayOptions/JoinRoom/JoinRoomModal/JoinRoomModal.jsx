@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from "react-router-dom";
+import { socket } from '../../../../Services';
 import {
     Modal,
     ModalOverlay,
@@ -17,8 +19,19 @@ import {
 export default function JoinRoomModal() {
     const { isOpen, onOpen, onClose } = useDisclosure()
     const [idInput, setIdInput] = useState("");
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        socket.on('room.join.res', (data) => {
+            console.log(data);
+            if (data.status === "success") {
+                navigate('/play');
+            }
+        });
+    });
 
     const handleOnJoinBtnClick = () => {
+        socket.emit('room.join', { id: socket.id, roomId: idInput , name: 'H'})
         console.log(idInput);
     }
 
