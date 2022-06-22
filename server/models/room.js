@@ -3,8 +3,7 @@ const mongoose = require('mongoose');
 const roomSchema = new mongoose.Schema({
   players: [
     {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
+      type: String,
     },
   ],
   mapSize: { type: Number, default: 5 },

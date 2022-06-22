@@ -5,7 +5,7 @@ const User = require('../models/user');
 module.exports = {
   createRoom: async (req, res) => {
     const {
-      user,
+      username,
       mapSize,
       diffNumChessSetting,
       minChess,
@@ -13,18 +13,11 @@ module.exports = {
       maxTimeOut,
       turnTime,
     } = req.body;
-
-    if (user === null) {
-      return res
-        .status(400)
-        .json({ message: 'You must log in to create room' });
-    }
-
-    const usernameObjectId = mongoose.Types.ObjectId(user.id);
+    console.log(username);
     const roomResult = await Room.findOne({
-      'players[0]': { $eq: usernameObjectId },
+      'players.0': { $eq: username },
     });
-
+    console.log(roomResult);
     if (roomResult === null) {
       const newRoom = new Room({
         players: [`${username}`],
@@ -50,8 +43,9 @@ module.exports = {
 
   getRoomByMasterUsername: async (req, res) => {
     const masterUsername = req.params.masterUsername;
+    console.log(masterUsername);
     const roomResult = await Room.findOne({
-      players: `${masterUsername}`,
+      'players.0': { $eq: masterUsername },
     });
     res.json(roomResult);
   },
@@ -68,12 +62,13 @@ module.exports = {
     } = req.body;
 
     const roomResult = await Room.findOne({
-      'players[0]': `${players[0]}`,
+      'players.0': `${players[0]}`,
     });
 
+    console.log(roomResult);
     if (roomResult !== null) {
-      const updatedRoom = await User.findByIdAndUpdate(
-        roomResult.id,
+      const updatedRoom = await Room.findByIdAndUpdate(
+        roomResult._id,
         {
           players,
           mapSize,
@@ -103,10 +98,8 @@ module.exports = {
       return res.status(400).json({ message: 'User doesnt exist' });
     }
 
-    const id = mongoose.Types.ObjectId(user.id);
-
     const roomResult = await Room.findOne({
-      'players[0]': { $eq: id },
+      'players.0': { $eq: username },
     });
 
     if (roomResult !== null) {
