@@ -10,6 +10,13 @@ const middleware = require('./utils/middleware');
 
 const config = require('./utils/config');
 const logger = require('./utils/logger');
+
+// const loginRouter = require('./controllers/login');
+// const usersRouter = require('./controllers/users');
+// const authenticationRouter = require('./controllers/authentication');
+// const playerRoute = require('./modules/player/playerRoute');
+// const matchRoute = require('./modules/match/matchRoute');
+// const authenticationRoute = require('./modules/authentication/authenticationRoute');
 const loginRouter = require('./routes/login');
 const usersRouter = require('./routes/users');
 const roomsRouter = require('./routes/rooms');
@@ -41,7 +48,10 @@ app.use(middleware.getTokenFrom);
 app.use(middleware.extractUserFromToken);
 
 // Routing
+app.use("/api/player", playerRoute);
+app.use("/api/match", matchRoute);
 app.use('/api/login', loginRouter);
+
 app.use('/api/users/', middleware.checkLogin, usersRouter);
 app.use('/api/room', middleware.checkLogin, roomsRouter);
 app.use('/api/socket', socketRouter); // remove
