@@ -97,27 +97,27 @@ function onConnection(socket) {
     });
 
     socket.on('tie', (data) => {
-        console.log(data.id + ' tie');
+        console.log('tie', data);
         const index = rooms.findIndex((room) => room.player2.id === data.id);
         if (index !== -1 && rooms[index].player1.id !== '') {
-            io.to(rooms[index].player1.id).emit('tie', {});
+            io.to(rooms[index].player1.id).emit('tie', {tieId: data.tieId});
         } else {
             const index = rooms.findIndex((room) => room.player1.id === data.id);
             if (index !== -1 && rooms[index].player2.id !== '') {
-                io.to(rooms[index].player2.id).emit('tie', {});
+                io.to(rooms[index].player2.id).emit('tie', {tieId: data.tieId});
             }
         }
     });
 
     socket.on('tie.res', (data) => {
-        console.log(data.id + ' tie.res');
+        console.log('tie.res', data);
         const index = rooms.findIndex((room) => room.player2.id === data.id);
         if (index !== -1 && rooms[index].player1.id !== '') {
-            io.to(rooms[index].player1.id).emit('tie.res', {status: 'success'});
+            io.to(rooms[index].player1.id).emit('tie.res', {status: 'success', tieResId: data.tieId});
         } else {
             const index = rooms.findIndex((room) => room.player1.id === data.id);
             if (index !== -1 && rooms[index].player2.id !== '') {
-                io.to(rooms[index].player2.id).emit('tie.res', {status: 'success'});
+                io.to(rooms[index].player2.id).emit('tie.res', {status: 'success', tieResId: data.tieId});
             }
         }
     });
@@ -126,27 +126,14 @@ function onConnection(socket) {
         console.log(data.id + ' close');
         const index = rooms.findIndex((room) => room.player2.id === data.id);
         if (index !== -1 && rooms[index].player1.id !== '') {
-            io.to(rooms[index].player1.id).emit('close', {});
+            io.to(rooms[index].player1.id).emit('close', {closeId: data.closeId});
         } else {
             const index = rooms.findIndex((room) => room.player1.id === data.id);
             if (index !== -1 && rooms[index].player2.id !== '') {
-                io.to(rooms[index].player2.id).emit('close', {});
+                io.to(rooms[index].player2.id).emit('close', {closeId: data.closeId});
             }
         }
     });
-
-    // socket.on('close.res', (data) => {
-    //     console.log(data.id + ' close.res');
-    //     const index = rooms.findIndex((room) => room.player2.id === data.id);
-    //     if (index !== -1 && rooms[index].player1.id !== '') {
-    //         io.to(rooms[index].player1.id).emit('close.res', {status: 'success'});
-    //     } else {
-    //         const index = rooms.findIndex((room) => room.player1.id === data.id);
-    //         if (index !== -1 && rooms[index].player2.id !== '') {
-    //             io.to(rooms[index].player2.id).emit('close.res', {status: 'success'});
-    //         }
-    //     }
-    // });
 
     socket.on('disconnect', () => {
         // clientId = socket.id;
