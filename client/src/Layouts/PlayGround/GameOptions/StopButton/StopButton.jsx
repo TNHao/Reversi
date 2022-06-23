@@ -17,16 +17,26 @@ export default function StopButton() {
     const { isOpen, onOpen, onClose } = useDisclosure()
     const cancelRef = React.useRef()
     const navigate = useNavigate();
+    let closeId = '';
+
+    function generateId() {
+        let id = Math.floor(Math.random() * (999999999 - 100000000) + 100000000);
+        return id.toString();
+    };
 
     useEffect(() => {
-        socket.on('close', () => {
-            navigate('/');
-            alert('Đối thủ xin thua, ván cờ kết thúc!');
+        socket.on('close', (data) => {
+            if (data.closeId !== closeId)
+            {
+                closeId = data.closeId;
+                navigate('/');
+                alert('Đối thủ xin thua, ván cờ kết thúc!');
+            }
         })
     }, []);
 
     function handleClose() {
-        socket.emit('close', {id: socket.id});
+        socket.emit('close', {id: socket.id, closeId: generateId()});
         onClose();
         navigate('/');
         alert("Xin thua thành công, ván cờ kết thúc!");

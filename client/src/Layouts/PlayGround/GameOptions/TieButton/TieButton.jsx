@@ -12,33 +12,45 @@ import {
     Button,
     AlertDialogCloseButton
 } from '@chakra-ui/react'
+import { useState } from 'react';
 
 export default function TieButton() {
     const { isOpen, onOpen, onClose } = useDisclosure();
     // const { isOpen:isOpen0, onOpen:onOpen0, onClose:onClose0 } = useDisclosure();
     const cancelRef = React.useRef();
     const navigate = useNavigate();
+    let tieId = '';
+    let tieResId = '';
+
+    function generateId() {
+        let id = Math.floor(Math.random() * (999999999 - 100000000) + 100000000);
+        return id.toString();
+    };
 
     useEffect(() => {
         socket.on('tie.res', (data) => {
-            if (data.status === 'success') {
+            if (data.status === 'success' && data.tieResId !== tieResId) {
+                tieResId = data.tieResId;
                 navigate('/');
-                alert("Xin hòa thành công, ván chơi kết thúc!");
+                alert("Xin hòa thành công, ván cờ kết thúc!");
             }
         });
 
-        socket.on('tie', () => {
-            // eslint-disable-next-line no-restricted-globals
-            if (confirm("Đối thủ xin hòa trận đấu, bạn có đồng ý?")) {
-                console.log('tie tie');
-                socket.emit('tie.res', {id: socket.id});
-                navigate('/');
+        socket.on('tie', (data) => {
+            if (data.tieId !== tieId) {
+                tieId = data.tieId;
+                // eslint-disable-next-line no-restricted-globals
+                if (confirm("Đối thủ xin hòa trận đấu, bạn có đồng ý?")) {
+                    // console.log('tie tie');
+                    socket.emit('tie.res', {id: socket.id, tieResId: generateId()});
+                    navigate('/');
+                }
             }
         })
     }, []);
 
     function handleTie() {
-        socket.emit('tie', {id: socket.id});
+        socket.emit('tie', {id: socket.id, tieId: generateId()});
         onClose();
         alert("Yêu cầu xin hòa đã được gửi đi!");
     }
