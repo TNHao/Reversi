@@ -31,6 +31,7 @@ export default function GameOptions() {
             }
             setCountDown(thinkingTime);
         }
+        setIsPlaying(true);
         console.log('turn', turn);
     });
 
