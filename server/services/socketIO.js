@@ -7,6 +7,11 @@ function ioSocketServer(ioSocket) {
     io.on('connection', onConnection);
 }
 
+function generateRestId() {
+    let id = Math.floor(Math.random() * (999999 - 100000) + 100000);
+    return id.toString();
+};
+
 function generateId() {
     let id = Math.floor(Math.random() * (999999 - 100000) + 100000);
     while (rooms.findIndex((room) => room.id === id) !== -1) {
@@ -43,31 +48,67 @@ function onConnection(socket) {
         }
     })
 
-    socket.on('room.ready', (data) => {
-        console.log(data);
-        const index = rooms.findIndex((room) => room.player2.id === data.id);
-        if (index !== -1) {
-            io.to(rooms[index].player1.id).emit('room.start', {
-                roomId: rooms[index].id,
-                data: rooms[index].data,
-                color: 'blue',
-            });
-            io.to(rooms[index].player2.id).emit('room.start', {
-                roomId: rooms[index].id,
-                data: rooms[index].data,
-                color: 'red',
-            });
+    // socket.on('room.ready', (data) => {
+    //     console.log(data);
+    //     const index = rooms.findIndex((room) => room.player2.id === data.id);
+    //     if (index !== -1) {
+    //         io.to(rooms[index].player1.id).emit('room.start', {
+    //             roomId: rooms[index].id,
+    //             data: rooms[index].data,
+    //             color: 'blue',
+    //         });
+    //         io.to(rooms[index].player2.id).emit('room.start', {
+    //             roomId: rooms[index].id,
+    //             data: rooms[index].data,
+    //             color: 'red',
+    //         });
+    //     } else {
+    //         const index = rooms.findIndex((room) => room.player1.id === data.id);
+    //         if (index !== -1) {
+    //             io.to(rooms[index].player1.id).emit('room.start', {
+    //                 roomId: rooms[index].id,
+    //                 data: rooms[index].data,
+    //                 color: 'none',
+    //             });
+    //         }
+    //     }
+    // })
+
+    socket.on('start', (data) => {
+        const index = rooms.findIndex((room) => room.player1.id === data.id);
+        if (index !== -1 && rooms[index].player2.id !== '') {
+            io.to(rooms[index].player1.id).emit('start', {});
+            io.to(rooms[index].player2.id).emit('start', {});
+        }
+    });
+
+    socket.on('pause', (data) => {
+        const index = rooms.findIndex((room) => room.player1.id === data.id);
+        if (index !== -1 && rooms[index].player2.id !== '') {
+            io.to(rooms[index].player1.id).emit('pause', {});
+            io.to(rooms[index].player2.id).emit('pause', {});
         } else {
-            const index = rooms.findIndex((room) => room.player1.id === data.id);
+            const index = rooms.findIndex((room) => room.player2.id === data.id);
             if (index !== -1) {
-                io.to(rooms[index].player1.id).emit('room.start', {
-                    roomId: rooms[index].id,
-                    data: rooms[index].data,
-                    color: 'none',
-                });
+                io.to(rooms[index].player1.id).emit('pause', {});
+                io.to(rooms[index].player2.id).emit('pause', {});
             }
         }
-    })
+    });
+
+    socket.on('stopPause', (data) => {
+        const index = rooms.findIndex((room) => room.player1.id === data.id);
+        if (index !== -1 && rooms[index].player2.id !== '') {
+            io.to(rooms[index].player1.id).emit('stopPause', {});
+            io.to(rooms[index].player2.id).emit('stopPause', {});
+        } else {
+            const index = rooms.findIndex((room) => room.player2.id === data.id);
+            if (index !== -1) {
+                io.to(rooms[index].player1.id).emit('stopPause', {});
+                io.to(rooms[index].player2.id).emit('stopPause', {});
+            }
+        }
+    });
 
     socket.on('move', (data) => {
         console.log(data);
@@ -135,18 +176,35 @@ function onConnection(socket) {
         }
     });
 
+    socket.on('del', (data) => {
+        const clientId = data.id;
+        const index = rooms.findIndex((room) => room.player2.id === clientId);
+        if (index !== -1) {
+            rooms.splice(index, 1);
+        } else {
+            const index = rooms.findIndex((room) => room.player1.id === clientId);
+            if (index !== -1) {
+                rooms.splice(index, 1);
+            }
+        }
+        console.log(rooms);
+    });
+
     socket.on('disconnect', () => {
-        // clientId = socket.id;
-        // const index = rooms.findIndex((room) => room.player2.id === clientId);
-        // if (index !== -1) {
-        //     rooms.splice(index, 1);
-        // } else {
-        //     const index = rooms.findIndex((room) => room.player1.id === clientId);
-        //     if (index !== -1) {
-        //         rooms.splice(index, 1);
-        //     }
-        // }
-        // console.log(rooms);
+        clientId = socket.id;
+        const index = rooms.findIndex((room) => room.player2.id === clientId);
+        if (index !== -1) {
+            io.to(rooms[index].player1.id).emit('lost', {lostId: generateRestId()});
+            rooms.splice(index, 1);
+        } else {
+            const index = rooms.findIndex((room) => room.player1.id === clientId);
+            if (index !== -1) {
+                if (rooms[index].player2.id !== '') {
+                    io.to(rooms[index].player2.id).emit('lost', {lostId: generateRestId()});
+                }
+                rooms.splice(index, 1);
+            }
+        }
         console.log('User disconnected ' + socket.id);
     });
 }
