@@ -39,7 +39,7 @@ export default function CreateRoomModal() {
     const { isOpen, onOpen, onClose } = useDisclosure()
     const [state, setState] = useState({
         size: 5,
-        differential: 2,
+        differential: 0,
         thinkingTime: 60,
         minimumPiecesToLose: 0,
         pauseTime: 2,

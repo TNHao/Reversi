@@ -31,7 +31,6 @@ export default function GameOptions() {
             }
             setCountDown(thinkingTime);
         }
-        setIsPlaying(true);
         console.log('turn', turn);
     });
 
@@ -89,6 +88,7 @@ export default function GameOptions() {
                     socket.emit('del', {id: socket.id});
                 } else {
                     alert('Hết thời gian, đối thủ đã thua!');
+                    socket.emit('del', {id: socket.id});
                 }
                 navigate('/');
             }
@@ -124,12 +124,6 @@ export default function GameOptions() {
                         {turn}
                     </Text>
                 </Text>
-                {/* <Button colorScheme='teal' variant='solid' _focus={{ boxShadow: "none" }}>
-                    Player 1
-                </Button>
-                <Button colorScheme='teal' variant='outline' _focus={{ boxShadow: "none" }}>
-                    Player 2
-                </Button> */}
             </Stack>
             {
                 (isPause)
@@ -149,7 +143,6 @@ export default function GameOptions() {
                 :
                 <></>
             }
-            {/* <CountDown/> */}
             {
                 (!isPause)
                 ?
@@ -161,12 +154,6 @@ export default function GameOptions() {
                     <CircularProgressLabel>{countDown}s</CircularProgressLabel>
                 </CircularProgress>
             }
-            {/* <CircularProgress value={40} size='150px' color='green.400'>
-                <CircularProgressLabel>40%</CircularProgressLabel>
-            </CircularProgress> */}
-            {/* <Button w={'50%'}>
-                Mời người chơi
-            </Button> */}
             <Stack direction='row' spacing={4}>
                 {
                     (!isPause)
