@@ -10,7 +10,7 @@ export default function GameOptions() {
     let color = localStorage.getItem('color');
     let [turn, setTurn] = useState('blue');
     let from = -1, to = -1;
-
+    const [isPlaying, setIsPlaying] = useState(false);
     socket.on('move', (data) => {
         console.log('chang turn', data);
         if (data.from !== from && data.to !== to) {
@@ -22,6 +22,7 @@ export default function GameOptions() {
                 setTurn('blue');
             }
         }
+        setIsPlaying(true);
         console.log('turn', turn);
     });
 
@@ -59,7 +60,7 @@ export default function GameOptions() {
                     Player 2
                 </Button> */}
             </Stack>
-            <CountDown/>
+            {isPlaying === true ? (<CountDown/>) : (<div></div>)}
             {/* <CircularProgress value={40} size='150px' color='green.400'>
                 <CircularProgressLabel>40%</CircularProgressLabel>
             </CircularProgress> */}
