@@ -36,7 +36,9 @@ export default function Board() {
   let board = getBoard();
 
   let [prePos, setPrePos] = useState(-1);
-  let turn = 'blue';
+  let [isPause, setPause] = useState(false);
+  // let turn = 'blue';
+  localStorage.setItem('turn', 'blue');
 
   const mapSize = 630;
   const tileSize = mapSize / data.size;
@@ -237,13 +239,24 @@ export default function Board() {
         document.getElementById((x - 1) * data.size + (y + 1)).className = cl;
       }
     }
+    const turn = localStorage.getItem('turn');
     if (turn === 'red') {
-      turn = 'blue';
+      localStorage.setItem('turn', 'blue');
+      // turn = 'blue';
     } else {
-      turn = 'red';
+      localStorage.setItem('turn', 'red');
+      // turn = 'red';
     }
     console.log('turn after move', turn);
   };
+
+  socket.on('pause', () => {
+    setPause(true);
+  })
+
+  socket.on('stopPause', () => {
+    setPause(false);
+  })
 
   useEffect(() => {
     socket.on('move', (data) => {
@@ -253,24 +266,25 @@ export default function Board() {
   })
 
   const handleClick = (id) => {
+    if (isPause) return;
+    const turn = localStorage.getItem('turn');
     const className = document.getElementById(id).className;
-    console.log('click', id, turn, color, className);
+    console.log('click', turn);
     // if ((className !== turn && className !== turn + "_hold") || turn !== color) return;
 
     hold(prePos, "none");
     if (id === prePos) {
       setPrePos(-1);
     } else if (className === "blue") {
-      // if (turn === 'blue' && turn === color) {
+      if (turn === 'blue' && turn === color) {
         hold(id, "blue_hold");
         setPrePos(id);
-      // }
+      }
     } else if (className === "red") {
-      // if (turn === 'red' && turn === color)
-      // {
+      if (turn === 'red' && turn === color) {
         hold(id, "red_hold");
         setPrePos(id);
-      // }
+      }
     } else {
       // console.log("move");
       // move(prePos, id);
